@@ -163,13 +163,60 @@ print(m1,'chart')
 <br>
 
 **Your Answers here:**
-<br>
-<br>
-<br>
-<br>
 
+1. 6, up to component 6, so that cummulative variance explained is over 50%. 
+2. 5 yr T-Notes and 10yr T-Notes have the highest weight of 0.93.
+3. They are agricultural commodities. The Eigenvalue of the first 10 compotents are all above 1, and the minimnum percentage of explained variance is 2.04%. The accumulative percentage of explained variance is greater than 50%, which is 62.61%. These components are call principal component.
+4. 
+a) the pre-crisis bull market years (e.g. only using the data between November 1, 2002, and October 1, 2007)
 
-<hr>
+```{r echo=TRUE, eval=TRUE, comment=NA, warning=FALSE,error=FALSE, message=FALSE, prompt=FALSE, tidy=TRUE}
+pre_crisis_data = futures_data[as.Date(rownames(futures_data)) > "2002-11-01" & as.Date(rownames(futures_data)) < "2007-10-01", ]
+
+Variance_Explained_Table_results <- PCA(pre_crisis_data, graph=FALSE)
+Variance_Explained_Table<-cbind(paste("component",1:ncol(futures_data),sep=" "),Variance_Explained_Table_results$eig)
+Variance_Explained_Table<-as.data.frame(Variance_Explained_Table)
+colnames(Variance_Explained_Table)<-c("Component","Eigenvalue", "Percentage_of_explained_variance", "Cumulative_percentage_of_explained_variance")
+```
+
+```{r echo=FALSE, comment=NA, warning=FALSE, message=FALSE, results='asis'}
+show_data = data.frame(Variance_Explained_Table)
+m1<-gvisTable(show_data,options=list(width=1920, height=min(400,27*(nrow(show_data)+1)),allowHTML=TRUE,page='disable'),formats=list(Eigenvalue="#.##",Percentage_of_explained_variance="#.##",Cumulative_percentage_of_explained_variance="#.##"))
+print(m1,'chart')
+```
+<br> 
+
+Here is the scree plot:
+
+```{r echo=TRUE, eval=TRUE, comment=NA, warning=FALSE,error=FALSE, message=FALSE, prompt=FALSE, tidy=TRUE}
+eigenvalues  <- Variance_Explained_Table[,2]
+```
+
+b) the financial crisis years (e.g. only using the data between October 1, 2007 and March 1, 2009)
+
+```{r echo=TRUE, eval=TRUE, comment=NA, warning=FALSE,error=FALSE, message=FALSE, prompt=FALSE, tidy=TRUE}
+crisis_data = futures_data[as.Date(rownames(futures_data)) > "2007-10-01" & as.Date(rownames(futures_data)) < "2009-03-01", ]
+
+Variance_Explained_Table_results<-PCA(futures_data, graph=FALSE)
+Variance_Explained_Table<-cbind(paste("component",1:ncol(futures_data),sep=" "),Variance_Explained_Table_results$eig)
+Variance_Explained_Table<-as.data.frame(Variance_Explained_Table)
+colnames(Variance_Explained_Table)<-c("Component","Eigenvalue", "Percentage_of_explained_variance", "Cumulative_percentage_of_explained_variance")
+```
+
+```{r echo=FALSE, comment=NA, warning=FALSE, message=FALSE, results='asis'}
+show_data = data.frame(Variance_Explained_Table)
+m1<-gvisTable(show_data,options=list(width=1920, height=min(400,27*(nrow(show_data)+1)),allowHTML=TRUE,page='disable'),formats=list(Eigenvalue="#.##",Percentage_of_explained_variance="#.##",Cumulative_percentage_of_explained_variance="#.##"))
+print(m1,'chart')
+```
+<br> 
+
+Here is the scree plot:
+
+```{r echo=TRUE, eval=TRUE, comment=NA, warning=FALSE,error=FALSE, message=FALSE, prompt=FALSE, tidy=TRUE}
+eigenvalues  <- Variance_Explained_Table[,2]
+```
+
+5. Overall market performance is easily affected by macro factors(such as bond rate) in bear market. 
 
 ### A Simple Futures Trend Following Strategy
 
@@ -247,6 +294,9 @@ How does this compare with **existing CTA products** such as [this one from Soci
 <br>
 
 **Your Answers here:**
+1. The code is calculating the moving average of different "window length" of each futures, and trying to use this average as the best future trading strategy.
+
+2. By changing the moving average windown, the growth trend changes. 
 <br>
 <br>
 <br>
